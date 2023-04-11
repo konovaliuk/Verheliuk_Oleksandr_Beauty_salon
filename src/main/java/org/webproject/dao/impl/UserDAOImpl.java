@@ -39,7 +39,10 @@ public class UserDAOImpl implements UserDAO {
             stmt.setLong(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return getUser(rs);
+                    User user = getUser(rs);
+                    List<Role> userRoles = new RoleDAOImpl(con).getUserRoles(user.getUserId());
+                    user.setRoles(userRoles);
+                    return user;
                 }
             }
         } catch (SQLException ex) {
@@ -88,7 +91,10 @@ public class UserDAOImpl implements UserDAO {
             stmt.setString(1, email);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return getUser(rs);
+                    User user = getUser(rs);
+                    List<Role> userRoles = new RoleDAOImpl(con).getUserRoles(user.getUserId());
+                    user.setRoles(userRoles);
+                    return user;
                 }
             }
         }
@@ -154,13 +160,5 @@ public class UserDAOImpl implements UserDAO {
         } catch (SQLException ex) {
             logger.error("Error: " + ex.getMessage());
         }
-    }
-
-    public String getHash(String password) {
-        return BCrypt.hashpw(password, BCrypt.gensalt());
-    }
-
-    public boolean checkPassword(String password, String hash) {
-        return BCrypt.checkpw(password, hash);
     }
 }

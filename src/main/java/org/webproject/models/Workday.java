@@ -10,7 +10,7 @@ public class Workday {
 
     private long idWorkday;
 
-    private User Master;
+    private User master;
 
     private LocalDateTime workStart;
 
