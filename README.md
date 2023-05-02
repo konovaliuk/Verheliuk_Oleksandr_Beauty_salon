@@ -3,7 +3,7 @@ Group KI-01
 
 Topic: beauty salon scheduling system.
 
-Lab 1: DAO.
+Lab 3: JPA.
 
 Database EER diagram.
 

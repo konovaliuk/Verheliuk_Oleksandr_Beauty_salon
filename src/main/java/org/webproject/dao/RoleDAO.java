@@ -6,9 +6,11 @@ import java.util.List;
 
 public interface RoleDAO extends DAO<Role>{
 
-    List<Role> getUserRoles(long idUser);
+    Role getByName(String name);
 
-    void deleteUserRoles(long idUser);
+//    List<Role> getUserRoles(long idUser);
+//
+//    void deleteUserRoles(long idUser);
 
 
 }

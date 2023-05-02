@@ -1,3 +1,6 @@
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 import org.webproject.dao.ConnectionPool;
 import org.webproject.dao.impl.AppointmentDAOImpl;
 import org.webproject.dao.impl.RoleDAOImpl;
@@ -16,36 +19,41 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) throws SQLException {
-        try (Connection con = ConnectionPool.getConnection()) {
-            List<Role> all_roles =  new RoleDAOImpl(con).getAll();
-            for (Role role: all_roles){
-                System.out.println(role);
-            }
+    public static void main(String[] args) {
 
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("BeautySalon");
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
 
-            User newUser = new User(-1, "taras@ukrnet.com", new UserDAOImpl(con).getHash("12345"), "Taras", "Shevchenko", new ArrayList<Role>());
-            new UserDAOImpl(con).create(newUser);
-            Role newRole = new RoleDAOImpl(con).get(1);
-            Role newRole2 = new RoleDAOImpl(con).get(2);
-            new UserDAOImpl(con).addUserRole(newUser, newRole);
-            new UserDAOImpl(con).addUserRole(newUser, newRole2);
+        User user = new UserDAOImpl(em).get(15);
+        Role newRole = new RoleDAOImpl(em).getByName("master");
+        user.addRole(newRole);
+        new UserDAOImpl(em).update(user);
+        System.out.println(user);
+        System.out.println("-----------");
 
-
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            Workday workday = new Workday(-1, newUser, LocalDateTime.parse("2023-03-23 09:00:00", formatter), LocalDateTime.parse("2023-03-23 18:00:00", formatter));
-            new WorkdayDAOImpl(con).create(workday);
-
-            User newCustomer = new User(-1, "ivan@ukrnet.com", new UserDAOImpl(con).getHash("12345"), "Ivan", "Franko", new ArrayList<Role>());
-            new UserDAOImpl(con).create(newCustomer);
-            Appointment appointment = new Appointment(-1, workday, newCustomer, LocalDateTime.parse("2023-03-23 10:00:00", formatter), LocalDateTime.parse("2023-03-23 11:00:00", formatter), "");
-            new AppointmentDAOImpl(con).create(appointment);
-            newCustomer.setPassword(new UserDAOImpl(con).getHash(("67890")));
-            new UserDAOImpl(con).update(newCustomer);
-        } catch (SQLException ex) {
-            System.out.println("Error. Can't connection to database. " + ex.getMessage());
-        } finally {
-            ConnectionPool.closePool();
+        List<Workday> all_workdays= new WorkdayDAOImpl(em).getAll();
+        for (Workday workday: all_workdays){
+                System.out.println(workday);
         }
+        System.out.println("-----------");
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        Workday workday = new Workday();
+        workday.setMaster(user);
+        workday.setWorkStart(LocalDateTime.parse("2023-05-05 09:00:00", formatter));
+        workday.setWorkFinish(LocalDateTime.parse("2023-05-05 18:00:00", formatter));
+        new WorkdayDAOImpl(em).create(workday);
+        System.out.println("-----------");
+
+        List<Workday> newAllWorkdays= new WorkdayDAOImpl(em).getAll();
+        for (Workday newWorkday: newAllWorkdays){
+            System.out.println(newWorkday);
+        }
+        System.out.println("-----------");
+
+        em.getTransaction().commit();
+        em.close();
+        emf.close();
     }
 }

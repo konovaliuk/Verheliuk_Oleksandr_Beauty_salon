@@ -8,16 +8,16 @@ import jakarta.persistence.*;
 
 @Data
 @Entity
-@Table(name = "role")
+@Table(name = "user_role")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Role {
+
+public class UserRole {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private long roleId;
+    @Column(name = "id_user")
+    private long userId;
 
-    @Column(name = "role_type")
-    private String roleType;
+    @Column(name = "id_role")
+    private long roleId;
 }

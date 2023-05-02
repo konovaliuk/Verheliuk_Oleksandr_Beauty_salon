@@ -11,9 +11,9 @@ public interface UserDAO extends DAO<User>{
 
     public User getByEmail(String email);
 
-    public User addUserRole(User user, Role role);
+//    public User addUserRole(User user, Role role);
 
-    public String getHash(String password);
+//    public String getHash(String password);
 
-    public boolean checkPassword(String password, String hash);
+//    public boolean checkPassword(String password, String hash);
 }
