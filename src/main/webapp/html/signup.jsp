@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,7 +24,7 @@
           <h4>Register</h4>
         </div>
         <div class="card-body">
-          <form action="/html/signup?command=signup" method="POST">
+          <form action="http://localhost:8080/html/signup" method="POST">
             <div class="mb-3">
               <label for="email" class="form-label">Email for login</label>
               <input type="email" class="form-control" id="email" name="email" autocomplete="off"

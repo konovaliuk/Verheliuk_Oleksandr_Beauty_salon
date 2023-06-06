@@ -1,119 +1,41 @@
 package org.webproject.services;
 
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.webproject.dao.ConnectionPool;
-import org.webproject.dao.RoleDAO;
-import org.webproject.dao.impl.RoleDAOImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.webproject.models.Role;
+import org.webproject.repository.RoleRepository;
 
-import java.sql.Connection;
 import java.util.List;
-
+@Service
+@Transactional
 public class RoleService {
+    private final RoleRepository roleRepository;
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+
+    @Autowired
+    public RoleService(RoleRepository roleRepository) {
+        this.roleRepository = roleRepository;
+    }
     public Role getRole(long id) {
-        try (Connection con = ConnectionPool.getConnection()){
-            RoleDAO roleDAO = new RoleDAOImpl(con);
-            try {
-                return roleDAO.get(id);
-            } catch (Exception ex) {
-                logger.error("Error: " + ex.getMessage());
-            }
-        } catch (Exception ex){
-            logger.error("Error: " + ex.getMessage());
-        }
-        return null;
+        return  roleRepository.findById(id).orElse(null);
     }
     public Role getRoleByName(String name) {
-        try (Connection con = ConnectionPool.getConnection()){
-            RoleDAO roleDAO = new RoleDAOImpl(con);
-            try {
-                return roleDAO.getByName(name);
-            } catch (Exception ex) {
-                logger.error("Error: " + ex.getMessage());
-            }
-        } catch (Exception ex){
-            logger.error("Error: " + ex.getMessage());
-        }
-        return null;
+        return roleRepository.findByName(name);
     }
     public List<Role> getAllRoles() {
-        try (Connection con = ConnectionPool.getConnection()){
-            RoleDAO roleDAO = new RoleDAOImpl(con);
-            try {
-                return roleDAO.getAll();
-            } catch (Exception ex) {
-                logger.error("Error: " + ex.getMessage());
-            }
-        } catch (Exception ex){
-            logger.error("Error: " + ex.getMessage());
-        }
-        return null;
+        return roleRepository.findAll();
     }
     public Role createRole(Role role){
-        try (Connection con = ConnectionPool.getConnection()){
-            RoleDAO roleDAO = new RoleDAOImpl(con);
-            try {
-                con.setAutoCommit(false);
-                if (roleDAO.create(role) != null) {
-                    con.commit();
-                    return role;
-                }
-            } catch (Exception ex) {
-                try {
-                    con.rollback();
-                } catch (Exception e){
-                    logger.error("Error: " + e.getMessage());
-                }
-            } finally {
-                con.setAutoCommit(true);
-            }
-        } catch (Exception ex){
-            logger.error("Error: " + ex.getMessage());
-        }
-        return null;
+        return roleRepository.save(role);
     }
     public void updateRole(Role role){
-        try (Connection con = ConnectionPool.getConnection()){
-            RoleDAO roleDAO = new RoleDAOImpl(con);
-            try {
-                con.setAutoCommit(false);
-                roleDAO.update(role);
-                con.commit();
-            } catch (Exception ex) {
-                try {
-                    con.rollback();
-                } catch (Exception e){
-                    logger.error("Error: " + e.getMessage());
-                }
-            } finally {
-                con.setAutoCommit(true);
-            }
-        } catch (Exception ex){
-            logger.error("Error: " + ex.getMessage());
-        }
+        roleRepository.save(role);
+
     }
-    public boolean deleteRole(long id){
-        try (Connection con = ConnectionPool.getConnection()){
-            RoleDAO roleDAO = new RoleDAOImpl(con);
-            try {
-                con.setAutoCommit(false);
-                roleDAO.delete(id);
-                con.commit();
-                return true;
-            } catch (Exception ex){
-                try {
-                    con.rollback();
-                } catch (Exception e){
-                    logger.error("Error: " + e.getMessage());
-                }
-            } finally {
-                con.setAutoCommit(true);
-            }
-        } catch (Exception ex) {
-            logger.error("Error: " + ex.getMessage());
-        }
-        return false;
+    public void deleteRole(long id){
+        roleRepository.deleteById(id);
     }
 }

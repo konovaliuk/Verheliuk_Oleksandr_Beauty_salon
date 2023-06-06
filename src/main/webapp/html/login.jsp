@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,7 +25,7 @@
           <h3 class="card-title">Login</h3>
         </div>
         <div class="card-body">
-          <form method="post" action="/html/login?command=login">
+          <form method="post" action="http://localhost:8080/html/login">
             <div class="mb-3">
               <label for="login" class="form-label">Username:</label>
               <input type="text" class="form-control" id="login" name="login" autocomplete="off"

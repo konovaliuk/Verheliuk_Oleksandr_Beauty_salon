@@ -3,4 +3,4 @@ Group KI-01
 
 Topic: beauty salon scheduling system.
 
-Lab 2: MVC.
+Lab 4: Spring Boot.

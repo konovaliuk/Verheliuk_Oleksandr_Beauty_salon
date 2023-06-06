@@ -18,13 +18,14 @@
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link" href="/html/schedule?command=schedule">Schedule</a>
+            <a class="nav-link" href="/html/schedule/1"/>Schedule</a>
           </li>
         </ul>
       </ul>
+
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" href="/html/logout?command=logout">Log out</a>
+          <a class="nav-link" href="/html/logout"/>Log out</a>
         </li>
       </ul>
     </div>

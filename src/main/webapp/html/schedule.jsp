@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,14 +26,80 @@
 
 <p> Workdays in our Beauty Salon: </p>
 <ul>
-  <jsp:useBean id="workdays" scope="session" type="java.util.List<org.webproject.models.Workday>"/>
-  <c:forEach var="workday" items="${workdays}">
-    <li>
-      <c:out value="${workday.master.firstName}"/>
-      <c:out value="${workday.workStart}"/>
-      <c:out value="${workday.workFinish}"/>
-    </li>
-  </c:forEach>
+  <div>
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Master Name</th>
+        <th>Workday start</th>
+        <th>Workday finish</th>
+      </tr>
+      </thead>
+      <tbody>
+      <c:forEach items="${listWorkday}" var="workday">
+        <tr>
+          <td>${workday.master.firstName}</td>
+          <td>${workday.workStart}</td>
+          <td>${workday.workFinish}</td>
+        </tr>
+      </c:forEach>
+      </tbody>
+    </table>
+    <div class="d-flex justify-content-center">
+      <nav>
+        <ul class="pagination">
+          <c:choose>
+            <c:when test="${page > 1}">
+              <li class="page-item">
+                <a class="page-link" href="${page - 1}" tabindex="-1">Previous</a>
+              </li>
+            </c:when>
+            <c:otherwise>
+              <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1">Previous</a>
+              </li>
+            </c:otherwise>
+          </c:choose>
+
+          <c:if test="${startPage > 1}">
+            <li class="page-item disabled">
+              <a class="page-link" href="#">...</a>
+            </li>
+          </c:if>
+
+          <c:forEach begin="${startPage}" end="${endPage}" var="i">
+            <c:choose>
+              <c:when test="${i == page}">
+                <li class="page-item active"><a class="page-link" href="${i}">${i}</a></li>
+              </c:when>
+              <c:otherwise>
+                <li class="page-item"><a class="page-link" href="${i}">${i}</a></li>
+              </c:otherwise>
+            </c:choose>
+          </c:forEach>
+
+          <c:if test="${endPage < totalPages}">
+            <li class="page-item disabled">
+              <a class="page-link" href="#">...</a>
+            </li>
+          </c:if>
+
+          <c:choose>
+            <c:when test="${page < totalPages}">
+              <li class="page-item">
+                <a class="page-link" href="${page + 1}">Next</a>
+              </li>
+            </c:when>
+            <c:otherwise>
+              <li class="page-item disabled">
+                <a class="page-link" href="#">Next</a>
+              </li>
+            </c:otherwise>
+          </c:choose>
+        </ul>
+      </nav>
+    </div>
+  </div>
 </ul>
 
 </body>
